@@ -1,5 +1,5 @@
 # Real
-Reimplementing Algorithms.
+_REimplementing ALgorithms_ is a collection of algorithms that I reimplemented.
 
 ## What is this repo
 The goal of this repo is quite simple. I want to reimplement algorithms that I find particularly interesting. The reason for this is that I want to understand the nitty gritty of how they work and to get myself familiar with state of the art tools and implementations.
