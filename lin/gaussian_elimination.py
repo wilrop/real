@@ -23,7 +23,7 @@ def gaussian_elimination(system):
     col_pivot = 0
 
     while row_pivot < rows and col_pivot < cols:
-        # Find the row with the largest pivot.
+        # Find the row with the largest absolute pivot.
         i_max = np.argmax(np.abs(solution[row_pivot:, col_pivot])) + row_pivot
         if solution[i_max, col_pivot] == 0:
             # The column is already in reduced row echelon form.
@@ -35,7 +35,7 @@ def gaussian_elimination(system):
             # Divide the row by the pivot.
             solution[row_pivot] /= solution[row_pivot, col_pivot]
 
-            # Subtract the row from all other rows.
+            # Subtract the pivot row multiplied by the coefficient in the pivot column from all other rows.
             for i in range(rows):
                 if i != row_pivot:
                     solution[i] -= solution[row_pivot] * solution[i, col_pivot]
@@ -46,10 +46,14 @@ def gaussian_elimination(system):
 
 
 def back_substitution(solution):
-    """Perform back substitution on a matrix in reduced row echelon form.
+    """Perform back substitution on a matrix in row echelon form.
+
+    Note:
+        Note that the solution is not necessarily in reduced row echelon form, thereby necessitating a slighly more
+        involved back substitution process.
 
     Args:
-        solution (ndarray): A matrix in reduced row echelon form.
+        solution (ndarray): A matrix in row echelon form.
 
     Returns:
         ndarray: The solution to the system of linear equations.
@@ -58,8 +62,8 @@ def back_substitution(solution):
     sub_sol = np.zeros(rows)
 
     for row_idx in reversed(range(rows)):
-        xi = 1 / solution[row_idx, row_idx] * (
-                solution[row_idx, -1] - np.sum(solution[row_idx, row_idx + 1:-1] * sub_sol[row_idx + 1:]))
+        yi = solution[row_idx, -1] - np.sum(solution[row_idx, row_idx + 1:-1] * sub_sol[row_idx + 1:])
+        xi = 1 / solution[row_idx, row_idx] * yi
         sub_sol[row_idx] = xi
     return sub_sol
 
