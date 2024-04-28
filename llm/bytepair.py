@@ -58,7 +58,12 @@ def merge(encoding, pair_to_merge, new_token):
 
 
 def byte_pair_decoding(encoding, vocab):
-    """Implements the decoding part of the tokenization process."""
+    """Implements the decoding part of the tokenization process.
+
+    Note:
+        This essentially reverses the encoding step. However, it can be done faster by reversing the vocab list and
+        iterating through the encoding list once.
+    """
     data = encoding
     for new_token, pair in reversed(vocab):
         new_data = []
@@ -69,6 +74,17 @@ def byte_pair_decoding(encoding, vocab):
                 new_data.append(token)
         data = new_data
     data = ''.join([chr(c) for c in data])
+    return data
+
+
+def byte_pair_decoding_fast(encoding, vocab):
+    """Implements the fast version of the decoder."""
+    data = encoding
+    vocab_dict = {idx: [idx] for idx in range(256)}
+    for new_token, pair in vocab:
+        vocab_dict[new_token] = [t for p in [pair[0], pair[1]] for t in vocab_dict[p]]
+    new_data = [char for token in data for char in vocab_dict[token]]
+    data = ''.join([chr(c) for c in new_data])
     return data
 
 
@@ -93,4 +109,6 @@ if __name__ == '__main__':
 
     encoding, vocab = byte_pair_encoding(MIT_LICENSE, args.vocab_size)
     decoding = byte_pair_decoding(encoding, vocab)
+    decoding_faster = byte_pair_decoding_fast(encoding, vocab)
     print(f'Successful decoding: {MIT_LICENSE == decoding}')
+    print(f'Successful faster decoding: {MIT_LICENSE == decoding_faster}')
