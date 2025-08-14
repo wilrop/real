@@ -3,6 +3,7 @@ import os
 import pickle
 import random
 import time
+import chex
 from typing import NamedTuple
 
 import haiku as hk
@@ -243,7 +244,7 @@ class TrainingState(NamedTuple):
     """
     params: hk.Params  # The model parameters.
     opt_state: optax.OptState  # The optimizer state.
-    rng: jnp.DeviceArray  # The RNG key.
+    rng: chex. PRNGKey  # The RNG key.
 
 
 @hk.transform
