@@ -103,6 +103,17 @@ def sample_next_token(
         eos_token_id: int | None = None,
         allow_eos: bool = True,
 ):
+    """Sample next token from logits.
+
+    Args:
+        logits (chex.Array): Logits to sample.
+        key (chex.PRNGKey): Random key.
+        temperature (float): Temperature parameter.
+        top_k (int): How many elements to consider for sampling.
+        top_p (float): Which cumulative probability to consideR.
+        eos_token_id (int | None): EOS token id.
+        allow_eos (bool): Whether to allow EOS tokens.
+    """
     if not allow_eos and eos_token_id is None:
         raise ValueError("`eos_token_id` must be set if `allow_eos` is False.")
 
